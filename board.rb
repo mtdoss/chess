@@ -1,5 +1,4 @@
-require_relative 'piece'
-require 'debugger'
+require_relative './pieces'
 
 class InvalidMoveError < ArgumentError 
 end
@@ -13,30 +12,18 @@ class Board
   end
   
   def set_pieces
-    self[[0,0]] = Rook.new(self, [0, 0], :w)
-    self[[1, 0]] = Knight.new(self, [1, 0], :w)
-    self[[2, 0]] = Bishop.new(self, [2, 0], :w)
-    self[[3, 0]] = Queen.new(self, [3, 0], :w)
-    self[[4, 0]] = King.new(self, [4, 0], :w)
-    self[[5, 0]] = Bishop.new(self, [5, 0], :w)
-    self[[6, 0]] = Knight.new(self, [6, 0], :w)
-    self[[7, 0]] = Rook.new(self, [7, 0], :w)
+    pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
     
-    0.upto(7) do |index|
-      self[[index, 1]] = Pawn.new(self, [index, 1], :w)
+    [[0, :w], [7, :b]].each do |(y, color)|
+      pieces.each_with_index do |klass, x|
+        self[[x, y]] = klass.new(self, [x, y], color)
+      end
     end
     
-    self[[0,7]] = Rook.new(self, [0, 7], :b)
-    self[[1, 7]] = Knight.new(self, [1, 7], :b)
-    self[[2, 7]] = Bishop.new(self, [2, 7], :b)
-    self[[3, 7]] = Queen.new(self, [3, 7], :b)
-    self[[4, 7]] = King.new(self, [4, 7], :b)
-    self[[5, 7]] = Bishop.new(self, [5, 7], :b)
-    self[[6, 7]] = Knight.new(self, [6, 7], :b)
-    self[[7, 7]] = Rook.new(self, [7, 7], :b)
-    
-    0.upto(7) do |index|
-      self[[index, 6]] = Pawn.new(self, [index, 6], :b)
+    [[1, :w], [6, :b]].each do |(y, color)|
+      0.upto(7) do |x|
+        self[[x, y]] = Pawn.new(self, [x, y], color)
+      end
     end
   end
   
@@ -94,6 +81,10 @@ class Board
     king[0].pos
   end
   
+  # def pieces
+  #
+  # end
+  #
   def get_pieces_of_color(color)
     @grid.flatten.select do |el|
       !el.nil? && el.color == color
@@ -103,7 +94,7 @@ class Board
   def deep_dup
     duped = Board.new(false)
     @grid.each_index do |row|
-      @grid.each_index do |col|
+      @grid.each_index do |col| # maybe 8.times?
         next if @grid[row][col].nil?
         piece = @grid[row][col]
         duped[[row, col]] = piece.class.new(duped, [row,col], piece.color)

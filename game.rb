@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'debugger'
-require_relative 'piece'
 require_relative 'board'
 
 class InvalidInputError < ArgumentError
@@ -72,18 +70,16 @@ class HumanPlayer
     @color = color
   end
   
-  def play_turn
-    begin
-      puts "Select your move in coordinate-form, e.g. e2, e4"
-      input = parse(gets.chomp)
-      if self.color != @board[input[0]].color
-        raise InvalidMoveError, "That's not your color"
-      end
-      @board.move(input[0], input[1])
-    rescue InvalidMoveError => e
-      puts "Error was: #{e.message}"
-      retry
+  def play_turn 
+    puts "Select your move in coordinate-form, e.g. e2, e4"
+    input = parse(gets.chomp)
+    if self.color != @board[input[0]].color
+      raise InvalidMoveError, "That's not your color"
     end
+    @board.move(input[0], input[1])
+  rescue InvalidMoveError => e
+    puts "Error was: #{e.message}"
+    retry
   end
   
   def parse(input)
@@ -98,6 +94,7 @@ class HumanPlayer
     return true unless (input =~ /[a-h][1-8],\s[a-h][1-8]/).nil?
     
     false
+    # !(input =~ /[a-h][1-8],\s[a-h][1-8]/).nil?
   end
   
   def convert_coords(coords)

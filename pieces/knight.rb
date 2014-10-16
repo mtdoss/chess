@@ -1,7 +1,8 @@
 require_relative 'stepping_piece'
 
 class Knight < SteppingPiece
-
+  attr_reader :deltas
+  
   def initialize(board, pos, color)
     super
     @deltas = [

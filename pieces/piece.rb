@@ -1,4 +1,5 @@
 require_relative '../board'
+require 'debugger'
 
 class Piece
   attr_accessor :color, :board, :pos
@@ -29,6 +30,13 @@ class Piece
   end
   
   def valid_moves
-    moves.select { |possible_move| !self.move_into_check?(possible_move) }
+    # debugger
+    moves.select do |possible_move|
+      Piece.on_board?(possible_move) && 
+        !self.move_into_check?(possible_move)
+        
+      # !self.move_into_check?(possible_move) &&
+      #   Piece.on_board?(possible_move)
+    end
   end
 end

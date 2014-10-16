@@ -1,0 +1,19 @@
+cool things we could do:
+
+Timed chess
+
+Save/load functionality
+
+More advanced UI
+
+Record moves in a game
+
+Computer player (that plays randomly)
+
+Make stuff private
+
+Checkerboard
+
+Promotion (pawn to queen at end)
+
+Castling

@@ -10,6 +10,7 @@ class SteppingPiece < Piece
     moves.select do |coords|
       Piece::on_board?(coords) && !@board[coords].nil? &&
           @board[coords].color != self.color
-    end  
+    end
+    moves  
   end  
 end

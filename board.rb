@@ -59,9 +59,13 @@ class Board
   def move!(start, end_pos)
     piece = self[start]
     piece.pos = end_pos
+    # debugger
     self[end_pos] = piece
     self[start] = nil
-    piece.moved = true if piece.class == Pawn   
+    if piece.class == Pawn
+      piece.moved = true
+      promotion(piece.pos, piece.color) if promote?(piece)
+    end
   end
   
   def move(start, end_pos)
@@ -75,16 +79,24 @@ class Board
   end
   
   def find_king(color)
-    king = @grid.flatten.select do |el|
-      !el.nil? && el.color == color && el.class == King
-    end
-    king[0].pos
+    kings = get_pieces_of_color(color).select { |p| p.class == King }
+    kings.first.pos
   end
   
-  # def pieces
-  #
-  # end
-  #
+  def promote?(piece)
+    color = piece.color
+    last_row = color == :w ? 7 : 0
+    piece.pos[1] == last_row
+  end
+
+  def promotion(pos, color)
+    self[pos] = Queen.new(self, pos, color)
+  end
+
+  def pieces
+
+  end
+
   def get_pieces_of_color(color)
     @grid.flatten.select do |el|
       !el.nil? && el.color == color
